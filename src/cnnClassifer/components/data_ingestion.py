@@ -1,9 +1,10 @@
 import os
 import urllib.request as request
 import zipfile
-from cnnClassifer.utils.common import get_size
+from cnnClassifer.utils.common import get_size,create_directories
 from cnnClassifer import logger
-from src.cnnClassifer.config.configuration import DataIngestionConfig
+from cnnClassifer.config.configuration import DataIngestionConfig
+
 from pathlib import Path
 
 
@@ -12,6 +13,9 @@ class DataIngestion:
         self.config = config
 
     def download_file(self):
+
+        create_directories([self.config.root_dir])
+
         if not os.path.exists(self.config.local_data_file):
             filename, headers = request.urlretrieve(
                 url =self.config.source_URL,
@@ -21,6 +25,7 @@ class DataIngestion:
 
 
     def extract_zip_file(self):
+        
         unzip_path = self.config.unzip_dir
         os.makedirs(unzip_path, exist_ok=True)
         with zipfile.ZipFile(file=self.config.local_data_file, mode="r") as zip_ref:

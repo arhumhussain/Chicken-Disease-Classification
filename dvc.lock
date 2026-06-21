@@ -1,0 +1,112 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/cnnClassifer/pipeline/step_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: b4a78903ab62225088c42ae564e6d3d9
+      size: 874
+    - path: src/cnnClassifer/pipeline/step_01_data_ingestion.py
+      hash: md5
+      md5: c5466195c27ebe71fa9492f2c351e4b5
+      size: 870
+    outs:
+    - path: artifacts/data_ingestion/Human-Face
+      hash: md5
+      md5: 9577654d88ebc646a3d298aad9de3a1f.dir
+      size: 6453814
+      nfiles: 510
+  base_model:
+    cmd: python src/cnnClassifer/pipeline/step_02_base_model_prepare.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: b4a78903ab62225088c42ae564e6d3d9
+      size: 874
+    - path: src/cnnClassifer/pipeline/step_02_base_model_prepare.py
+      hash: md5
+      md5: b88f701c80660df464d7253162ba867d
+      size: 838
+    params:
+      params.yaml:
+        CLASSES: 2
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+        INCLUDE_TOP: false
+        LEARNING_RATE: 0.01
+        WEIGHTS: imagenet
+    outs:
+    - path: artifacts/base_model
+      hash: md5
+      md5: 35416b815c34cfde87827936986e8e0e.dir
+      size: 118073624
+      nfiles: 2
+  training:
+    cmd: python src/cnnClassifer/pipeline/step_03_training.py
+    deps:
+    - path: artifacts/base_model
+      hash: md5
+      md5: 35416b815c34cfde87827936986e8e0e.dir
+      size: 118073624
+      nfiles: 2
+    - path: artifacts/data_ingestion/Human-Face
+      hash: md5
+      md5: 9577654d88ebc646a3d298aad9de3a1f.dir
+      size: 6453814
+      nfiles: 510
+    - path: config/config.yaml
+      hash: md5
+      md5: b4a78903ab62225088c42ae564e6d3d9
+      size: 874
+    - path: src/cnnClassifer/components/prepare_callback.py
+      hash: md5
+      md5: a554ae549bc13cf96857e9ea996ebc72
+      size: 999
+    - path: src/cnnClassifer/pipeline/step_03_training.py
+      hash: md5
+      md5: 4ba1db53ecc862fdb38d6c7ff065f5e1
+      size: 1147
+    params:
+      params.yaml:
+        AUGMENTATION: false
+        BATCH_SIZE: 16
+        EPOCHS: 1
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+    outs:
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: 04362bd6bda125306411ec9a68ca1513
+      size: 59551336
+  evaluation:
+    cmd: python src/cnnClassifer/pipeline/step_04_evaluation.py
+    deps:
+    - path: artifacts/data_ingestion/Human-Face
+      hash: md5
+      md5: 9577654d88ebc646a3d298aad9de3a1f.dir
+      size: 6453814
+      nfiles: 510
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: 04362bd6bda125306411ec9a68ca1513
+      size: 59551336
+    - path: config/config.yaml
+      hash: md5
+      md5: b4a78903ab62225088c42ae564e6d3d9
+      size: 874
+    - path: src/cnnClassifer/pipeline/step_04_evaluation.py
+      hash: md5
+      md5: 1e905320ae3981cf44dea515f2e71719
+      size: 827
+    params:
+      params.yaml:
+        BATCH_SIZE: 16
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3

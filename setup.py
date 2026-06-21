@@ -3,11 +3,11 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 
-REPO_NAME = "Chicken-Disease-Classification"
+REPO_NAME = "DeepFake-Image-Classifier"
 AUTHOR_USER_NAME = "Arhum Hussain"
-SRC_REPO = "cnnClassifier"
+SRC_REPO = "cnnClassifer"
 AUTHOR_EMAIL = "arhum4273@gmail.com"
 
 setuptools.setup(
@@ -15,7 +15,7 @@ setuptools.setup(
     version=__version__,
     author=AUTHOR_USER_NAME,
     author_email=AUTHOR_EMAIL,
-    description="A small package for Chicken Disease Classification",
+    description="A Flask app and TensorFlow pipeline for deepfake image classification",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url=f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}",
